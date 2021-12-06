@@ -34,7 +34,7 @@ def get_pic():
 @app.route('/')
 def show_pic():
     pic = get_pic()
-    copy = poem.get_poem(url, 7, 10) # use poem module to get a poem for display in html
+    copy = poem.get_poem(url, 5, 7) # use poem module to get a poem for display in html
     return render_template('index.html', pic=pic, copy=copy)
 
 
