@@ -1,19 +1,68 @@
 from flask import Flask, session, redirect, url_for, request, render_template, current_app, g, flash
+import sqlite3
 import requests
 from bs4 import BeautifulSoup
 from random import randint
 import poem
+from datetime import datetime
+import os
 
 
 app = Flask(__name__)
 
 check_username = 'admin'
 check_password = 'password'
+app.secret_key = '\xbb\xcc\xdbS-\xcb\x99\xc3\xf5\xe7&\x87\xcc\xef\x98\x86\x80[\xcd\xad\x05\xf6\xfd\xd2'
+
+
+## don't need this dict, right???
+posts = {
+    '2021-12-06' : (1, 'post1.txt'),
+    '2021-12-05' : (1, 'post2.txt')
+}
+
+today = datetime.today().strftime('%Y-%m-%d')
+
+
+### SQL STUFF START SQL STUFF START SQL STUFF START SQL STUFF START SQL STUFF START SQL STUFF START 
+
+conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
+cur = conn.cursor() 
+
+
+cur.execute('DROP TABLE IF EXISTS posts')
+#create + populate table with existing posts
+cur.execute('''CREATE TABLE IF NOT EXISTS posts ( 
+            date DATE,
+            user INTEGER,
+            entry_title TEXT
+            )''')
+
+def populate_table(dict):
+    for k, v in dict.items():
+        cur.execute('INSERT INTO posts VALUES (?,?,?)', (k,v[0], v[1]))
+
+    conn.commit()
+
+populate_table(posts)
+
+def get_posts():
+    conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
+    cur = conn.cursor() 
+
+    cur.execute('SELECT * FROM posts ORDER BY date DESC') # retreived in descending order by date. So the need not necessarily stored as a stack but retreived as if they were
+    post_results = cur.fetchall()
+    return post_results
+    #print(post_results)
+
+
+### SQL STUFF END SQL STUFF END SQL STUFF END SQL STUFF END SQL STUFF END SQL STUFF END SQL STUFF END 
 
 
 @app.route('/')
 def main_page():
     return redirect('/login')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -25,15 +74,69 @@ def login():
         elif request.form['password'] != check_password:
             error = 'Incorrect password'
         else:
-        #     session['logged_in'] = True 
+            session['logged_in'] = True 
             return redirect(url_for('dashboard'))
 
     return render_template('login.html', error=error)
 
 
+
+# create/store a txt file with copy from crewate_post,.html with blog title as filename
+# then add post to sql db
+def write_file(title, str):
+    conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
+    cur = conn.cursor() 
+
+
+    with open(f'{title}.txt', 'w+') as f:
+        f.write(str)
+    
+    cur.execute('INSERT INTO posts VALUES (?,?,?)', (today, 1, title))
+    conn.commit()
+
+# gets rowid from db where entry_title equals title parameter
+def get_id(title):
+    conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
+    cur = conn.cursor() 
+
+    cur.execute('SELECT rowid FROM posts WHERE entry_title == ?;', [title])
+    id = cur.fetchone()
+    print(id)
+    return id
+
 @app.route('/dashboard')
 def dashboard():
-    return render_template('dashboard.html', copy=[1,2,3,4,5])
+    if session['logged_in'] == True:
+        return render_template('dashboard.html', copy=get_posts()) 
+
+@app.route('/createpost', methods=['GET', 'POST'])
+def create_post():
+    if request.method == 'GET':
+        return render_template('create_post.html')
+    elif request.method == 'POST':
+        title = request.form['blogtitle']
+        copy = request.form['blogcopy']
+        write_file(title, copy)
+        id = get_id(title)
+    return redirect(url_for('post', id=id))
+
+
+@app.route('/post/<id>')
+def post(id):
+
+    conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
+    cur = conn.cursor() 
+
+    cur.execute('SELECT * FROM posts WHERE rowid == ?', id)
+    results = cur.fetchone()
+    title = results[2]
+
+    
+    with open(f'{title}.txt', 'r+') as f:
+        post = f.read()
+
+
+    return render_template('post.html', title=title, post=post) #change to actual post
 
 
 if __name__ == '__main__':

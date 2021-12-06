@@ -7,14 +7,29 @@
     <title>dashboard</title>
 </head>
 <body>
-    <h1 align='center'>DASHBOARD</h1>
+    <h1 align='center'>dashboard</h1>
 
-    <table class="center" border="0" align="left">
+    <table class="center" border="1" align="left">
         <!-- POSTS TABLE  -->
         <tr>
             <th>date</th>
+            <th>user</th>
             <th>entry</th>
+            <th>link</th>
         </tr>
+        <tr>
+            {% for c in range(copy|length) %}
+
+            <td>{{ copy[c][0] }}</td>
+            <td>{{ copy[c][1] }}</td>
+            <td>{{ copy[c][2] }}</td>
+            <!-- make the below link go to the actual post -->
+            <td><a href="/student/{{copy[c][0]}}">go to post</a></td>
+        </tr>
+        {% endfor %}
+
+        <p><a href="/createpost">create new post</a></p>
+
     
 </body>
 </html>
