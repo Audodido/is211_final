@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+
+<body>
+    <h1>Please Log In</h1>
+    {% if error != None %}
+    <h2>{{ error }} — Please try again.</h2>
+    {% endif %}
+
+
+
+    <form action="/login" method="post">
+        <p>Username</p> 
+        <input type="text" name="username"></input>
+        <p>Password</p> 
+        <input type="text" name="password"></input>
+        <input type="submit" value="submit"></input>
+    </form>
+
+</body>
+</html>
