@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from random import randint
 
+###TEST
 
 # gets a random image from the times homepage and displays it on an index html page
 app = Flask(__name__)
