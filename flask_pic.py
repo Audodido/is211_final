@@ -2,6 +2,7 @@ from flask import Flask, session, redirect, url_for, request, render_template, c
 import requests
 from bs4 import BeautifulSoup
 from random import randint
+import poem
 
 
 # gets a random image from the times homepage and displays it on an index html page
@@ -26,10 +27,15 @@ def get_pic():
 
 
 
+
+
+
+
 @app.route('/')
 def show_pic():
     pic = get_pic()
-    return render_template('index.html', pic=pic)
+    copy = poem.get_poem(url, 7, 10) # use poem module to get a poem for display in html
+    return render_template('index.html', pic=pic, copy=copy)
 
 
 if __name__ == '__main__':
