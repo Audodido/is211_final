@@ -17,8 +17,8 @@ app.secret_key = '\xbb\xcc\xdbS-\xcb\x99\xc3\xf5\xe7&\x87\xcc\xef\x98\x86\x80[\x
 
 ## don't need this dict, right???
 posts = {
-    '2021-12-06' : (1, 'post1.txt'),
-    '2021-12-05' : (1, 'post2.txt')
+    '2021-12-06' : (1, 'post1'),
+    '2021-12-05' : (1, 'post2')
 }
 
 today = datetime.today().strftime('%Y-%m-%d')
@@ -50,7 +50,7 @@ def get_posts():
     conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
     cur = conn.cursor() 
 
-    cur.execute('SELECT * FROM posts ORDER BY date DESC') # retreived in descending order by date. So the need not necessarily stored as a stack but retreived as if they were
+    cur.execute('SELECT rowid, date, user, entry_title FROM posts ORDER BY date DESC') # retreived in descending order by date. So the need not necessarily stored as a stack but retreived as if they were
     post_results = cur.fetchall()
     return post_results
     #print(post_results)

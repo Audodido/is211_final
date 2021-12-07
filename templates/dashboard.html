@@ -16,19 +16,26 @@
             <th>user</th>
             <th>entry</th>
             <th>link</th>
+            <th>edit</th>
+            <th>delete</th>
         </tr>
         <tr>
             {% for c in range(copy|length) %}
 
-            <td>{{ copy[c][0] }}</td>
             <td>{{ copy[c][1] }}</td>
             <td>{{ copy[c][2] }}</td>
+            <td>{{ copy[c][3] }}</td>
             <!-- make the below link go to the actual post -->
-            <td><a href="/student/{{copy[c][0]}}">go to post</a></td>
+            <td><a href="/post/{{copy[c][0]}}">go to post</a></td>
+            <!-- form action must go to a route in main.py RIGHT NOW THEY DONT DO ANYTHING -->
+            <td><form action="/clear" method="post"><input type="submit" value="edit"></input></td> 
+            <td><form action="/clear" method="post"><input type="submit" value="delete"></input></td> 
         </tr>
         {% endfor %}
 
         <p><a href="/createpost">create new post</a></p>
+
+
 
     
 </body>
