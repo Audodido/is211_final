@@ -8,6 +8,7 @@
 </head>
 <body>
     <h1 align='center'>dashboard</h1>
+    
 
     <table class="center" border="1" align="left">
         <!-- POSTS TABLE  -->
@@ -20,18 +21,24 @@
             <th>delete</th>
         </tr>
         <tr>
+        
             {% for c in range(copy|length) %}
-
             <td>{{ copy[c][1] }}</td>
             <td>{{ copy[c][2] }}</td>
             <td>{{ copy[c][3] }}</td>
             <!-- make the below link go to the actual post -->
             <td><a href="/post/{{copy[c][0]}}">go to post</a></td>
-            <!-- form action must go to a route in main.py RIGHT NOW THEY DONT DO ANYTHING -->
-            <td><form action="/clear" method="post"><input type="submit" value="edit"></input></td> 
-            <td><form action="/clear" method="post"><input type="submit" value="delete"></input></td> 
+            <!-- buttons don't work the same as links that's why they don't go to the right places rn -->
+
+            <!-- <td><form action="/post/{{copy[c][0]}}" method="post"><input type="submit" value="edit"></input></td>  -->
+            <td><form action="/post/{{copy[c][0]}}" method="post"><input type="submit" value="edit"></input></td> 
+
+            <td><form action="/post/{{copy[c][0]}}" method="post"><input type="submit" value="delete"></input></td> 
+            
         </tr>
-        {% endfor %}
+            
+            {% endfor %}
+
 
         <p><a href="/createpost">create new post</a></p>
 

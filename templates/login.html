@@ -8,11 +8,10 @@
 </head>
 
 <body>
-    <h1>Please Log In</h1>
+    <h1>Please log in to read or edit posts</h1>
     {% if error != None %}
     <h2>{{ error }} — Please try again.</h2>
     {% endif %}
-
 
 
     <form action="/login" method="post">
@@ -22,6 +21,11 @@
         <input type="text" name="password"></input>
         <input type="submit" value="submit"></input>
     </form>
+
+    <h2>Previous posts</h2>
+    {% for p in posts %}
+    <h3>{{ p }}</h3>
+    {% endfor %}
 
 </body>
 </html>

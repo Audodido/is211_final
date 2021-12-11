@@ -3,3 +3,5 @@ Questions
 How can I do this so it writes to a folder in the directory (would be in the write_file function)
 
 Help with g.db????
+
+Help with editing posts?

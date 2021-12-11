@@ -7,10 +7,30 @@
     <title>{{ title }}</title>
 </head>
 <body>
+
+    {% if edit == False %}
+
     <h1>{{ title }}</h1>
 
     {{post}}
     {{ (post | length) }}
+
+
+    {% else %}
+
+    Pull text from txt file and put it in text so it's editable
+    
+
+    <form action="/createpost" method="post">
+        <p>edit title:</p> 
+        <input type="text" value={{title}} name="blogtitle"></input>
+        <p>edit text:</p> 
+        <input type="text" placeholder={{post}} name="blogcopy"></input>
+
+        <input type="submit" value="Submit"></input>
+    </form>
+
+    {% endif %}
 
     <p><a href="/dashboard">back to dashboard</a></p>
 

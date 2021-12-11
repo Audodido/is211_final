@@ -77,8 +77,11 @@ def login():
             session['logged_in'] = True 
             return redirect(url_for('dashboard'))
 
-    return render_template('login.html', error=error)
-
+    conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
+    cur = conn.cursor()
+    cur.execute("SELECT entry_title FROM posts") 
+    posts = cur.fetchall()
+    return render_template('login.html', error=error, posts=posts)
 
 
 # create/store a txt file with copy from crewate_post,.html with blog title as filename
@@ -108,6 +111,7 @@ def get_id(title):
 def dashboard():
     if session['logged_in'] == True:
         return render_template('dashboard.html', copy=get_posts()) 
+        
 
 @app.route('/createpost', methods=['GET', 'POST'])
 def create_post():
@@ -121,22 +125,36 @@ def create_post():
     return redirect(url_for('post', id=id))
 
 
-@app.route('/post/<id>')
+@app.route('/post/<id>', methods=['GET', 'POST'])
 def post(id):
+    edit = False
+    if request.method=='GET': #need this or no?
+        conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
+        cur = conn.cursor() 
 
-    conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
-    cur = conn.cursor() 
+        cur.execute('SELECT * FROM posts WHERE rowid == ?', id)
+        results = cur.fetchone()
+        title = results[2]
 
-    cur.execute('SELECT * FROM posts WHERE rowid == ?', id)
-    results = cur.fetchone()
-    title = results[2]
+        with open(f'{title}.txt', 'r+') as f:
+            post = f.read()
 
-    
-    with open(f'{title}.txt', 'r+') as f:
-        post = f.read()
+        return render_template('post.html', edit=edit, title=title, post=post) #change to actual post
 
 
-    return render_template('post.html', title=title, post=post) #change to actual post
+    elif request.method=='POST': #need this or no?
+        edit = True
+        conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
+        cur = conn.cursor() 
+
+        cur.execute('SELECT * FROM posts WHERE rowid == ?', id)
+        results = cur.fetchone()
+        title = results[2]
+
+        with open(f'{title}.txt', 'r+') as f:
+            post = f.read()
+
+        return render_template('post.html', edit=edit, title=title, post=post) #change to actual post
 
 
 if __name__ == '__main__':
