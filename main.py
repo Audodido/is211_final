@@ -143,6 +143,7 @@ def post(id):
 
 
     elif request.method=='POST': #need this or no?
+
         edit = True
         conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
         cur = conn.cursor() 
@@ -150,6 +151,7 @@ def post(id):
         cur.execute('SELECT * FROM posts WHERE rowid == ?', id)
         results = cur.fetchone()
         title = results[2]
+        
 
         with open(f'{title}.txt', 'r+') as f:
             post = f.read()
