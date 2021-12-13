@@ -8,14 +8,20 @@
 </head>
 <body>
 
-    <form action="/createpost" method="post">
-        <p>title:</p> 
-        <input type="text" name="blogtitle"></input>
-        <p>text:</p> 
-        <input type="text" name="blogcopy"></input>
+    <h1>Select a Title For Your Post</h1>
 
-        <input type="submit" value="Submit"></input>
+    <!-- GOTTA MAKE A URL_FOR -->
+
+    {% for line in headlines %}
+    <p><a href="/post/{{ line | replace(' ', '_') | replace('.', '') | replace('›', '') | replace('’', '') | replace('‘', '') | replace(',', '') | replace('?', '') }}">{{line}}</a></p>
+    <!-- <p> {{line}} </p> -->
+    {% endfor %}
+
+    <form action="/createpost" method="post">
+        <p>Or create your own:</p> 
+        <input type="text" name="blogtitle"></input>
     </form>
+
 
 </body>
 </html>

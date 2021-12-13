@@ -6,10 +6,14 @@ from random import randint
 import poem
 from datetime import datetime
 import os
+import re 
+from headlines import getAllHeadlines
+
 
 
 app = Flask(__name__)
 
+url = 'https://nytimes.com'
 check_username = 'admin'
 check_password = 'password'
 app.secret_key = '\xbb\xcc\xdbS-\xcb\x99\xc3\xf5\xe7&\x87\xcc\xef\x98\x86\x80[\xcd\xad\x05\xf6\xfd\xd2'
@@ -53,7 +57,6 @@ def get_posts():
     cur.execute('SELECT rowid, date, user, entry_title FROM posts ORDER BY date DESC') # retreived in descending order by date. So the need not necessarily stored as a stack but retreived as if they were
     post_results = cur.fetchall()
     return post_results
-    #print(post_results)
 
 
 ### SQL STUFF END SQL STUFF END SQL STUFF END SQL STUFF END SQL STUFF END SQL STUFF END SQL STUFF END 
@@ -116,7 +119,9 @@ def dashboard():
 @app.route('/createpost', methods=['GET', 'POST'])
 def create_post():
     if request.method == 'GET':
-        return render_template('create_post.html')
+        #call function from headlines module to get headlines to choose from 
+        headlines = getAllHeadlines(url)
+        return render_template('create_post.html', headlines=headlines)
     elif request.method == 'POST':
         title = request.form['blogtitle']
         copy = request.form['blogcopy']
