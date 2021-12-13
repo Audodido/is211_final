@@ -123,8 +123,8 @@ def create_post():
         headlines = getAllHeadlines(url)
         return render_template('create_post.html', headlines=headlines)
     elif request.method == 'POST':
-        title = request.form['blogtitle']
-        copy = request.form['blogcopy']
+        title = request.form.get('title')
+        # copy = request.form['blogcopy']
         write_file(title, copy)
         id = get_id(title)
     return redirect(url_for('post', id=id))
