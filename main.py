@@ -137,7 +137,7 @@ def post(id):
         conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
         cur = conn.cursor() 
 
-        cur.execute('SELECT * FROM posts WHERE rowid == ?', id)
+        cur.execute('SELECT * FROM posts WHERE rowid == ?', (id,))
         results = cur.fetchone()
         title = results[2]
 
