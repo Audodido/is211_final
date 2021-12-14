@@ -4,10 +4,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dashboard</title>
+    <title>bad Times poetry - dashboard</title>
 </head>
 <body>
-    <h1 align='center'>dashboard</h1>
+    <h1 align='center'>bad Times poetry</h1>
+
+    <h4>The  <a href="https://en.wikipedia.org/wiki/Cut-up_technique">'cut-up method'</a> refers to an aleatory literary technique 
+        in which a written text is cut up and rearranged to create a new text. 
+        The concept can be traced to at least the Dadaists of the 1920s, but was popularized 
+        in the late 1950s and early 1960s by writer William S. Burroughs as part of his "cut-up poems". 
+        </h4>
+
+    <h5>'bad Times poetry' scrapes headlines from the New York Times homepage and 
+        reassembles them into lines of (pretty bad) poetry</h5>
     
 
     <table class="center" border="1" align="left">
@@ -21,7 +30,7 @@
             <th>delete</th>
         </tr>
         <tr>
-        
+    
             {% for c in range(copy|length) %}
             <td>{{ copy[c][1] }}</td>
             <td>{{ copy[c][2] }}</td>

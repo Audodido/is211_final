@@ -3,7 +3,7 @@ import sqlite3
 import requests
 from bs4 import BeautifulSoup
 from random import randint
-import poem
+from poem import get_poem
 from datetime import datetime
 import os
 import re 
@@ -54,7 +54,7 @@ def get_posts():
     conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
     cur = conn.cursor() 
 
-    cur.execute('SELECT rowid, date, user, entry_title FROM posts ORDER BY date DESC') # retreived in descending order by date. So the need not necessarily stored as a stack but retreived as if they were
+    cur.execute('SELECT rowid, date, user, entry_title FROM posts ORDER BY rowid DESC') # retreived in descending order by date. So the need not necessarily stored as a stack but retreived as if they were
     post_results = cur.fetchall()
     return post_results
 
@@ -123,10 +123,16 @@ def create_post():
         headlines = getAllHeadlines(url)
         return render_template('create_post.html', headlines=headlines)
     elif request.method == 'POST':
-        title = request.form.get('title')
-        # copy = request.form['blogcopy']
-        write_file(title, copy)
-        id = get_id(title)
+        title = request.form['foo'] #radio button answer 
+
+        copy = " ".join(get_poem(url, 5, 10)) #create a poem
+        print(title)
+        print(copy)
+        
+        write_file(title, copy) #write the file to the database
+        
+        id = get_id(title) #call up the id for the new blog entry
+
     return redirect(url_for('post', id=id))
 
 
