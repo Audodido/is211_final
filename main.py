@@ -126,14 +126,30 @@ def create_post():
         title = request.form['foo'] #radio button answer 
 
         copy = " ".join(get_poem(url, 5, 10)) #create a poem
-        print(title)
-        print(copy)
+        # print(title)
+        # print(copy)
         
         write_file(title, copy) #write the file to the database
         
         id = get_id(title) #call up the id for the new blog entry
 
     return redirect(url_for('post', id=id))
+
+
+@app.route('/deletepost', methods=['POST'])
+def delete_post():
+    post_to_delete = request.form['action'].replace('delete', '')
+    post_to_delete = int(post_to_delete.strip())
+
+    conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
+    cur = conn.cursor() 
+
+    cur.execute("DELETE FROM posts WHERE rowid == ?;" (post_to_delete))
+
+    conn.commit()
+
+    return render_template('/dashboard')
+
 
 
 @app.route('/post/<id>', methods=['GET', 'POST'])
