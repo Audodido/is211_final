@@ -8,6 +8,7 @@ from datetime import datetime
 import os
 import re 
 from headlines import getAllHeadlines
+from os.path import exists
 
 
 
@@ -71,6 +72,10 @@ def main_page():
 def login():
     error = None
 
+    
+    if exists("poster.txt"): #######TESTING THIS
+        print("YES")
+
     if request.method=='POST':
         if request.form['username'] != check_username:
             error = 'Incorrect username'
@@ -123,33 +128,20 @@ def create_post():
         headlines = getAllHeadlines(url)
         return render_template('create_post.html', headlines=headlines)
     elif request.method == 'POST':
+
         title = request.form['foo'] #radio button answer 
 
+        
+
         copy = " ".join(get_poem(url, 5, 10)) #create a poem
-        # print(title)
-        # print(copy)
+        print(title)
+        print(copy)
         
         write_file(title, copy) #write the file to the database
         
         id = get_id(title) #call up the id for the new blog entry
 
     return redirect(url_for('post', id=id))
-
-
-@app.route('/deletepost', methods=['POST'])
-def delete_post():
-    post_to_delete = request.form['action'].replace('delete', '')
-    post_to_delete = int(post_to_delete.strip())
-
-    conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
-    cur = conn.cursor() 
-
-    cur.execute("DELETE FROM posts WHERE rowid == ?;" (post_to_delete))
-
-    conn.commit()
-
-    return render_template('/dashboard')
-
 
 
 @app.route('/post/<id>', methods=['GET', 'POST'])
@@ -169,7 +161,7 @@ def post(id):
         return render_template('post.html', edit=edit, title=title, post=post) #change to actual post
 
 
-    elif request.method=='POST': #need this or no?
+    elif request.method=='POST':
 
         edit = True
         conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!

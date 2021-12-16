@@ -23,9 +23,20 @@
 
     <form action="/createpost" method="post">
         <p>edit title:</p> 
-        <input type="text" value={{title}} name="blogtitle"></input>
+        <textarea rows="10" cols="10" name="blogcopy">
+            {{title}}
+        </textarea>
+
+        <!-- <input type="text" value={{title}} name="blogtitle"></input> -->
+
         <p>edit text:</p> 
-        <input type="text" placeholder={{post}} name="blogcopy"></input>
+
+        <textarea rows="10" cols="10" name="blogcopy">
+            {{post}}
+        </textarea>
+
+
+        <!-- <input type="text" placeholder={{post}} name="blogcopy"></input> -->
 
         <input type="submit" value="Submit"></input>
     </form>
