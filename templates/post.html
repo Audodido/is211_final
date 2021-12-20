@@ -10,30 +10,30 @@
 
     {% if edit == False %}
 
-    <h1>{{ title }}</h1>
+    <h1>{{ title }} </h1>
+
+
 
     {{post}}
-    {{ (post | length) }}
 
 
     {% else %}
 
-    Pull text from txt file and put it in text so it's editable
-    
-
-    <form action="/createpost" method="post">
+    <!-- make <id> subdomain -->
+    <form action="/post/edit/{{id}}" method="post"> 
         <p>edit title:</p> 
-        <textarea rows="10" cols="10" name="blogcopy">
+        <textarea rows="4" cols="40" name="blogtitle">
             {{title}}
         </textarea>
-
-        <!-- <input type="text" value={{title}} name="blogtitle"></input> -->
-
         <p>edit text:</p> 
-
-        <textarea rows="10" cols="10" name="blogcopy">
+        <textarea rows="17" cols="100" name="blogcopy">
             {{post}}
         </textarea>
+
+
+
+
+
 
 
         <!-- <input type="text" placeholder={{post}} name="blogcopy"></input> -->

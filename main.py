@@ -131,11 +131,9 @@ def create_post():
 
         title = request.form['foo'] #radio button answer 
 
-        
-
         copy = " ".join(get_poem(url, 5, 10)) #create a poem
-        print(title)
-        print(copy)
+        # print(title)
+        # print(copy)
         
         write_file(title, copy) #write the file to the database
         
@@ -144,11 +142,28 @@ def create_post():
     return redirect(url_for('post', id=id))
 
 
+@app.route('/post/edit/<id>', methods=['POST'])
+def edit_post(id):
+    conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!
+    cur = conn.cursor() 
+
+    edited_title = request.form['blogtitle']
+    edited_poem = request.form['blogcopy']
+
+    cur.execute('UPDATE posts SET entry_title = ? WHERE rowid = ?', (edited_title, id))
+
+    with open(f'{edited_title}.txt', 'w+') as f:
+        f.write(edited_poem)
+    
+    conn.commit()
+
+    return redirect('/dashboard')
+
 @app.route('/post/<id>', methods=['GET', 'POST'])
 def post(id):
     edit = False
     if request.method=='GET': #need this or no?
-        conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
+        conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!
         cur = conn.cursor() 
 
         cur.execute('SELECT * FROM posts WHERE rowid == ?', (id,))
@@ -158,7 +173,9 @@ def post(id):
         with open(f'{title}.txt', 'r+') as f:
             post = f.read()
 
-        return render_template('post.html', edit=edit, title=title, post=post) #change to actual post
+        for p in post:
+            print(type(post))
+        return render_template('post.html', edit=edit, title=title, post=post, id=id) #change to actual post
 
 
     elif request.method=='POST':
@@ -167,15 +184,15 @@ def post(id):
         conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
         cur = conn.cursor() 
 
+        # cur.execute('SELECT * FROM posts WHERE rowid == ?', id)
         cur.execute('SELECT * FROM posts WHERE rowid == ?', id)
         results = cur.fetchone()
         title = results[2]
         
-
         with open(f'{title}.txt', 'r+') as f:
             post = f.read()
 
-        return render_template('post.html', edit=edit, title=title, post=post) #change to actual post
+        return render_template('post.html', edit=edit, title=title, post=post, id=id) #change to actual post
 
 
 if __name__ == '__main__':
