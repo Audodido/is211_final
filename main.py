@@ -20,12 +20,6 @@ check_password = 'password'
 app.secret_key = '\xbb\xcc\xdbS-\xcb\x99\xc3\xf5\xe7&\x87\xcc\xef\x98\x86\x80[\xcd\xad\x05\xf6\xfd\xd2'
 
 
-## don't need this dict, right???
-posts = {
-    '2021-12-06' : (1, 'post1'),
-    '2021-12-05' : (1, 'post2')
-}
-
 today = datetime.today().strftime('%Y-%m-%d')
 
 
@@ -43,13 +37,6 @@ cur.execute('''CREATE TABLE IF NOT EXISTS posts (
             entry_title TEXT
             )''')
 
-def populate_table(dict):
-    for k, v in dict.items():
-        cur.execute('INSERT INTO posts VALUES (?,?,?)', (k,v[0], v[1]))
-
-    conn.commit()
-
-populate_table(posts)
 
 def get_posts():
     conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
