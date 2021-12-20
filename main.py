@@ -147,8 +147,8 @@ def edit_post(id):
     conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!
     cur = conn.cursor() 
 
-    edited_title = request.form['blogtitle']
-    edited_poem = request.form['blogcopy']
+    edited_title = request.form['blogtitle'].strip()
+    edited_poem = request.form['blogcopy'].strip()
 
     cur.execute('UPDATE posts SET entry_title = ? WHERE rowid = ?', (edited_title, id))
 
@@ -158,6 +158,19 @@ def edit_post(id):
     conn.commit()
 
     return redirect('/dashboard')
+
+@app.route('/deletepost/<id>', methods=['POST'])
+def delete_post(id):
+    if request.method=='POST':
+        conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!
+        cur = conn.cursor()         
+
+        cur.execute('DELETE FROM posts WHERE rowid == ?', (id,))
+
+        conn.commit()
+        
+        return redirect('/dashboard')
+
 
 @app.route('/post/<id>', methods=['GET', 'POST'])
 def post(id):
@@ -173,8 +186,6 @@ def post(id):
         with open(f'{title}.txt', 'r+') as f:
             post = f.read()
 
-        for p in post:
-            print(type(post))
         return render_template('post.html', edit=edit, title=title, post=post, id=id) #change to actual post
 
 
@@ -184,7 +195,6 @@ def post(id):
         conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
         cur = conn.cursor() 
 
-        # cur.execute('SELECT * FROM posts WHERE rowid == ?', id)
         cur.execute('SELECT * FROM posts WHERE rowid == ?', id)
         results = cur.fetchone()
         title = results[2]
