@@ -21,7 +21,7 @@ app.secret_key = '\xbb\xcc\xdbS-\xcb\x99\xc3\xf5\xe7&\x87\xcc\xef\x98\x86\x80[\x
 
 
 today = datetime.today().strftime('%Y-%m-%d')
-
+login_error = "Sorry — you must log in to access that feature."
 
 ### SQL STUFF START SQL STUFF START SQL STUFF START SQL STUFF START SQL STUFF START SQL STUFF START 
 
@@ -79,7 +79,7 @@ def login():
     return render_template('login.html', error=error, posts=posts)
 
 
-# create/store a txt file with copy from crewate_post,.html with blog title as filename
+# create/store a txt file with copy from create_post,.html with blog title as filename
 # then add post to sql db
 def write_file(title, str):
     conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
@@ -92,6 +92,7 @@ def write_file(title, str):
     cur.execute('INSERT INTO posts VALUES (?,?,?)', (today, 1, title))
     conn.commit()
 
+
 # gets rowid from db where entry_title equals title parameter
 def get_id(title):
     conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
@@ -102,11 +103,12 @@ def get_id(title):
     print(id)
     return id
 
+
 @app.route('/dashboard')
 def dashboard():
     if session['logged_in'] == True:
         return render_template('dashboard.html', copy=get_posts()) 
-        
+
 
 @app.route('/createpost', methods=['GET', 'POST'])
 def create_post():

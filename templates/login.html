@@ -5,12 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 
 <body>
-    <h1>Please log in to read or edit posts</h1>
+    <h1 class="title">Please log in to read or edit posts</h1>
     {% if error != None %}
-    <h2>{{ error }} — Please try again.</h2>
+    <h2 class="title" id="error">{{ error }} — Please try again.</h2>
     {% endif %}
 
 
@@ -22,10 +23,10 @@
         <input type="submit" value="submit"></input>
     </form>
 
-    <h2>Previous posts</h2>
+    <!-- <h2>Previous posts</h2>
     {% for p in posts %}
     <h3>{{ p }}</h3>
-    {% endfor %}
+    {% endfor %} -->
 
 </body>
 </html>

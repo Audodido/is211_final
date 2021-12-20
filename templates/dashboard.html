@@ -5,21 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>bad Times poetry - dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <h1 align='center'>bad Times poetry</h1>
+    <h1 class="title">bad Times poetry blog</h1>
 
-    <h4>The  <a href="https://en.wikipedia.org/wiki/Cut-up_technique">'cut-up method'</a> refers to an aleatory literary technique 
+    <h4 class="blurb">The  <a href="https://en.wikipedia.org/wiki/Cut-up_technique" class="embedded_link">'cut-up method'</a> refers to an aleatory literary technique 
         in which a written text is cut up and rearranged to create a new text. 
         The concept can be traced to at least the Dadaists of the 1920s, but was popularized 
         in the late 1950s and early 1960s by writer William S. Burroughs as part of his "cut-up poems". 
         </h4>
 
-    <h5>'bad Times poetry' scrapes headlines from the New York Times homepage and 
-        reassembles them into lines of (admittedly pretty bad) poetry</h5>
+    <h5 class="blurb">'bad Times poetry' scrapes current headlines from the New York Times homepage and 
+        reassembles their words into lines of (admittedly pretty bad) poetry</h5>
     
 
-    <table class="center" border="1" align="left">
+    <table border="1">
         <!-- POSTS TABLE  -->
         <tr>
             <th>date</th>
@@ -43,7 +44,7 @@
                 <input type="submit" name="action" value="edit"></form></td> 
                 <!-- CREATE /DELETEPOST -->
             <td><form action="/deletepost/{{copy[c][0]}}" method="post">
-                <input type="submit" name="action" id='ss' value="delete">
+                <input type="submit" name="action" value="delete">
                 <!-- <input id="{{copy[c][0]}}" type="submit" name="submit" value="{{copy[c][0]}}"> -->
                 
             </form></td> 
@@ -54,7 +55,7 @@
             {% endfor %}
 
 
-        <p><a href="/createpost">create new post</a></p>
+        <p><a href="/createpost" class="create">create new post</a></p>
 
 
 

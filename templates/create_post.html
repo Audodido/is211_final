@@ -5,15 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>new post</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
 
-    <h1>Select a Title For Your Post</h1>
-    <h2>Click submit and a new poem/blog entry will be generated</h2>
+    <h1 class="title">select a title for your post</h1>
+    <h2 class="title">... then click "submit" (bottom of page) and a new poem/blog entry will be generated</h2>
     <p><a href="/dashboard">back to dashboard</a></p>
 
     <!-- GOTTA MAKE A URL_FOR -->
-    <table class="center" border="0" align="left">
+    <table border="1">
     <tr>
     {% for line in headlines %}
         <td>{{line}}</td>
@@ -26,9 +27,9 @@
     {% endfor %}
 
     </table>
-
-    <form action="/createpost" method="post"><input type="submit" name="submit_button" value="Submit"></form>
-    
+    <div class='buttonholder'
+        <form action="/createpost" id="btn1" method="post"><input type="submit" name="submit_button" value="Submit"></form>
+    </div>
 
 </body>
 </html>
