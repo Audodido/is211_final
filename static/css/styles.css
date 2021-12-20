@@ -22,6 +22,7 @@ a:not(.embedded_link) {
     font-weight: bold;
     font-style: italic;
     font-size: 30px;
+    width: 500px;
 }
 
 form {
@@ -53,7 +54,8 @@ h1 {
 .blurb {
     color: rgb(142, 143, 140);
     text-align: center;
-    padding: 15px
+    padding: 15px;
+    width: 960px
 }
 
 .buttonholder {

@@ -5,8 +5,6 @@ from bs4 import BeautifulSoup
 from random import randint
 from poem import get_poem
 from datetime import datetime
-import os
-import re 
 from headlines import getAllHeadlines
 from os.path import exists
 
@@ -106,92 +104,106 @@ def get_id(title):
 
 @app.route('/dashboard')
 def dashboard():
-    if session['logged_in'] == True:
-        return render_template('dashboard.html', copy=get_posts()) 
 
+    if not session.get('logged_in'):
+            return redirect('/login')       
+    else:
+        return render_template('dashboard.html', copy=get_posts()) 
 
 @app.route('/createpost', methods=['GET', 'POST'])
 def create_post():
-    if request.method == 'GET':
-        #call function from headlines module to get headlines to choose from 
-        headlines = getAllHeadlines(url)
-        return render_template('create_post.html', headlines=headlines)
-    elif request.method == 'POST':
+    if not session.get('logged_in'):
+            return redirect('/login')
+    else:
+        if request.method == 'GET':
+            #call function from headlines module to get headlines to choose from 
+            headlines = getAllHeadlines(url)
+            return render_template('create_post.html', headlines=headlines)
+        elif request.method == 'POST':
 
-        title = request.form['foo'] #radio button answer 
+            title = request.form['foo'] #radio button answer 
 
-        copy = " ".join(get_poem(url, 5, 10)) #create a poem
-        # print(title)
-        # print(copy)
-        
-        write_file(title, copy) #write the file to the database
-        
-        id = get_id(title) #call up the id for the new blog entry
+            copy = " ".join(get_poem(url, 5, 10)) #create a poem
+            # print(title)
+            # print(copy)
+            
+            write_file(title, copy) #write the file to the database
+            
+            id = get_id(title) #call up the id for the new blog entry
 
-    return redirect(url_for('post', id=id))
+        return redirect(url_for('post', id=id))
 
 
 @app.route('/post/edit/<id>', methods=['POST'])
 def edit_post(id):
-    conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!
-    cur = conn.cursor() 
+    if not session.get('logged_in'):
+            return redirect('/login')
+    else:
+        conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!
+        cur = conn.cursor() 
 
-    edited_title = request.form['blogtitle'].strip()
-    edited_poem = request.form['blogcopy'].strip()
+        edited_title = request.form['blogtitle'].strip()
+        edited_poem = request.form['blogcopy'].strip()
 
-    cur.execute('UPDATE posts SET entry_title = ? WHERE rowid = ?', (edited_title, id))
+        cur.execute('UPDATE posts SET entry_title = ? WHERE rowid = ?', (edited_title, id))
 
-    with open(f'{edited_title}.txt', 'w+') as f:
-        f.write(edited_poem)
-    
-    conn.commit()
+        with open(f'{edited_title}.txt', 'w+') as f:
+            f.write(edited_poem)
+        
+        conn.commit()
 
-    return redirect('/dashboard')
+        return redirect('/dashboard')
 
 @app.route('/deletepost/<id>', methods=['POST'])
 def delete_post(id):
-    if request.method=='POST':
-        conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!
-        cur = conn.cursor()         
+    if not session.get('logged_in'):
+            return redirect('/login')
+    else:
+        if request.method=='POST':
+            conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!
+            cur = conn.cursor()         
 
-        cur.execute('DELETE FROM posts WHERE rowid == ?', (id,))
+            cur.execute('DELETE FROM posts WHERE rowid == ?', (id,))
 
-        conn.commit()
-        
-        return redirect('/dashboard')
+            conn.commit()
+            
+            return redirect('/dashboard')
 
 
 @app.route('/post/<id>', methods=['GET', 'POST'])
 def post(id):
-    edit = False
-    if request.method=='GET': #need this or no?
-        conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!
-        cur = conn.cursor() 
+    if not session.get('logged_in'):
+            return redirect('/login')
+    else:
+        edit = False
+        if request.method=='GET': #need this or no?
+            conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!
+            cur = conn.cursor() 
 
-        cur.execute('SELECT * FROM posts WHERE rowid == ?', (id,))
-        results = cur.fetchone()
-        title = results[2]
+            cur.execute('SELECT * FROM posts WHERE rowid == ?', (id,))
+            results = cur.fetchone()
+            title = results[2]
 
-        with open(f'{title}.txt', 'r+') as f:
-            post = f.read()
+            with open(f'{title}.txt', 'r+') as f:
+                post = f.read()
 
-        return render_template('post.html', edit=edit, title=title, post=post, id=id) #change to actual post
+            return render_template('post.html', edit=edit, title=title, post=post, id=id) #change to actual post
 
 
-    elif request.method=='POST':
+        elif request.method=='POST':
 
-        edit = True
-        conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
-        cur = conn.cursor() 
+            edit = True
+            conn = sqlite3.connect('blog_posts.db') #connect to the database in same thread/method !!change to g.db!!
+            cur = conn.cursor() 
 
-        cur.execute('SELECT * FROM posts WHERE rowid == ?', id)
-        results = cur.fetchone()
-        title = results[2]
-        
-        with open(f'{title}.txt', 'r+') as f:
-            post = f.read()
+            cur.execute('SELECT * FROM posts WHERE rowid == ?', id)
+            results = cur.fetchone()
+            title = results[2]
+            
+            with open(f'{title}.txt', 'r+') as f:
+                post = f.read()
 
-        return render_template('post.html', edit=edit, title=title, post=post, id=id) #change to actual post
+            return render_template('post.html', edit=edit, title=title, post=post, id=id) #change to actual post
 
 
 if __name__ == '__main__':
