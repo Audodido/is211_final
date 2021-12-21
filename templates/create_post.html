@@ -13,15 +13,11 @@
     <h2 class="title">... then click "submit" (bottom of page) and a new poem/blog entry will be generated</h2>
     <p><a href="/dashboard">back to dashboard</a></p>
 
-    <!-- GOTTA MAKE A URL_FOR -->
     <table border="1">
     <tr>
     {% for line in headlines %}
         <td>{{line}}</td>
         <td><form action="/createpost" method="post"><input type="radio" name="foo" value="{{line | replace('›', '')}}"></input></td> 
-
-        <!-- <td><form action="/createpost" method="post"><input type="submit" name ="{{line}}" value="select"></input></td>  -->
-        <!-- <td><form action="/createpost/{{ line | replace(' ', '_') | replace('.', '') | replace('›', '') | replace('’', '') | replace('‘', '') | replace(',', '') | replace('?', '') | replace(':', '') }}" method="post"><input type="submit" name ="{{line}}" value="select"></input></td>  -->
 
     </tr>
     {% endfor %}

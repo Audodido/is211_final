@@ -6,7 +6,7 @@ import pprint
 
 url = 'https://nytimes.com'
 
-def getAllHeadlines(url):
+def getAllHeadlines(url): #returns headlines from nytimes homepage
 
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'lxml')

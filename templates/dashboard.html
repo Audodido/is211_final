@@ -22,7 +22,6 @@
     
 
     <table border="1">
-        <!-- POSTS TABLE  -->
         <tr>
             <th>date</th>
             <th>user</th>
@@ -38,24 +37,19 @@
             <td>{{ copy[c][2] }}</td>
             <td>{{ copy[c][3] }}</td>
             <td><a href="/post/{{copy[c][0]}}">go to post</a></td>
-            <!-- <td><form action="/post/{{copy[c][0]}}" method="post"><input type="radio" name="foo" value="{{copy[c][0]}}"></input></td> 
-            <td><form action="/post/{{copy[c][0]}}" method="post"><input type="radio" name="foo" value="{{copy[c][0]}}"></input></td>  -->
 
             <td><form action="/post/{{copy[c][0]}}" method="post">
                 <input type="submit" name="action" value="edit"></form></td> 
-                <!-- CREATE /DELETEPOST -->
             <td><form action="/deletepost/{{copy[c][0]}}" method="post">
                 <input type="submit" name="action" value="delete">
-                <!-- <input id="{{copy[c][0]}}" type="submit" name="submit" value="{{copy[c][0]}}"> -->
                 
             </form></td> 
 
             
         </tr>
-            
+
             {% endfor %}
-
-
+        
         <p><a href="/createpost" class="create">create new post</a></p>
 
 

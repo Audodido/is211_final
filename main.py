@@ -1,4 +1,4 @@
-from flask import Flask, session, redirect, url_for, request, render_template, current_app, g, flash
+from flask import Flask, session, redirect, url_for, request, render_template   
 import sqlite3
 from poem import get_poem
 from datetime import datetime

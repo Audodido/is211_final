@@ -13,14 +13,10 @@
 
     <h1 class="title">{{ title }} </h1>
 
-
-
     <p class="poem">{{post}}</p>
-
 
     {% else %}
 
-    <!-- make <id> subdomain -->
     <form action="/post/edit/{{id}}" method="post"> 
         <p>edit title:</p> 
         <textarea rows="4" cols="40" name="blogtitle">
