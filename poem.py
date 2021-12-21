@@ -5,7 +5,7 @@ import re
 
 url = 'https://nytimes.com'
 
-def get_poem(url, lines, words):
+def get_poem(url, lines, words): # scrapes headlines, adds words to a list, selects them at random and formats them as a poem. 
 
     words_per_line = randint(1, words)
     response = requests.get(url)
@@ -13,7 +13,6 @@ def get_poem(url, lines, words):
 
     headlines = [headline.text for headline in soup.find_all('h3')]
 
-    #word_pool len is 642 (number of words aggregated)
     word_pool = []
     conjunctions = []
 
@@ -35,7 +34,7 @@ def get_poem(url, lines, words):
         statement = ""
         for i in range(words_per_line): #length of each line
             # if you want to add conjunctions
-            if i == 4: #or i == 5:
+            if i == 4: 
                 statement += f'{conjunctions[randint(0, len(conjunctions)-1)]} '
             else:
                 word_selector = randint(0, len(word_pool)-1)
